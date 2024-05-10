@@ -26,12 +26,12 @@ module DecodeStage(
     input RegWriteW,
     input [4:0] RdW,
     input [31:0] PCD, InstrD, ResultW, PCPlus4D,
-    output JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,
+    output JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,                                  
     output [1:0] ResultSrcE,
     output [2:0] ALUControlE,
-    output [31:0] RD1E, RD2E,
-    output [31:0] ImmExtE,
-    output [4:0] RdE, RS1E, RS2E,
+    output [31:0] RD1E, RD2E,           
+    output [31:0] ImmExtE,     
+    output [4:0] Rs1E, Rs2E, RdE,
     output [31:0] PCE, PCPlus4E
     );
     
@@ -55,7 +55,7 @@ module DecodeStage(
     
     reg [31:0] ImmExtD_reg;                                             //--For Sign Extender
     
-    reg [4:0] RdD_reg, RS1D_reg, RS2D_reg;                                                  //--For Fetch -> Decode
+    reg [4:0] Rs1D_reg, Rs2D_reg, RdD_reg;                              //--For Fetch -> Decode
     reg [31:0] PCD_reg, PCPlus4D_reg;
     
     //Initialization of Modules
@@ -112,37 +112,37 @@ module DecodeStage(
     
     always_ff@ (posedge CLK or negedge RESET) begin
         if (RESET) begin
-            RegWriteD_reg <= 0;
-            ResultSrcD_reg <= 0;
-            MemWriteD_reg <= 0;
-            JumpD_reg <= 0;
-            BranchD_reg <= 0;
-            ALUSrcD_reg <= 0;
-            ALUControlD_reg <= 0;
-            RD1D_reg <= 0;
-            RD2D_reg <= 0;
-            ImmExtD_reg <= 0;
-            RdD_reg <= 0;
-            PCD_reg <= 0;
-            PCPlus4D_reg <= 0;
-            RS1D_reg <= 0'
-            RS2D_reg <= 0;
+            RegWriteD_reg = 0;
+            ResultSrcD_reg = 0;
+            MemWriteD_reg = 0;
+            JumpD_reg = 0;
+            BranchD_reg = 0;
+            ALUSrcD_reg = 0;
+            ALUControlD_reg = 0;
+            RD1D_reg = 0;
+            RD2D_reg = 0;
+            ImmExtD_reg = 0;
+            Rs1D_reg = 0;
+            Rs2D_reg = 0;
+            RdD_reg = 0;
+            PCD_reg = 0;
+            PCPlus4D_reg = 0;
         end else begin
-            RegWriteD_reg <= RegWriteD;
-            ResultSrcD_reg <= ResultSrcD;
-            MemWriteD_reg <= MemWriteD;
-            JumpD_reg <= JumpD;
-            BranchD_reg <= BranchD;
-            ALUSrcD_reg <= ALUSrcD;
-            ALUControlD_reg <= ALUControlD;
-            RD1D_reg <= RD1D;
-            RD2D_reg <= RD2D;
-            ImmExtD_reg <= ImmExtD;
-            RdD_reg <= InstrD[11:7];
-            PCD_reg <= PCD;
-            PCPlus4D_reg <= PCPlus4D;
-            RS1D_reg <= InstrD[19:15];
-            RS2D_reg <= InstrD[24:20];
+            RegWriteD_reg = RegWriteD;
+            ResultSrcD_reg = ResultSrcD;
+            MemWriteD_reg = MemWriteD;
+            JumpD_reg = JumpD;
+            BranchD_reg = BranchD;
+            ALUSrcD_reg = ALUSrcD;
+            ALUControlD_reg = ALUControlD;
+            RD1D_reg = RD1D;
+            RD2D_reg = RD2D;
+            ImmExtD_reg = ImmExtD;
+            Rs1D_reg = InstrD[19:15];
+            Rs2D_reg = InstrD[24:20];
+            RdD_reg = InstrD[11:7];
+            PCD_reg = PCD;
+            PCPlus4D_reg = PCPlus4D;
         end
     end
     
@@ -157,10 +157,10 @@ module DecodeStage(
     assign RD1E = RD1D_reg;
     assign RD2E = RD2D_reg;                                             //--Pt.2: Register File
     assign ImmExtE = ImmExtD_reg;                                       //--Pt.3: Sign Extender
-    assign RdE = RdD_reg;                                               //--Pt.4: Fetch -> Decode
+    assign Rs1E = Rs1D_reg;                                             //--Pt.4: Fetch -> Decode
+    assign Rs2E = Rs2D_reg;
+    assign RdE = RdD_reg;                                               
     assign PCE = PCD_reg;
-    assign PCPlus4E = PCPlus4D_reg;
-    assign RS1E = RS1D_reg;
-    assign RS2E = RS2D_reg;
+    assign PCPlus4E = PCPlus4D_reg; 
 
 endmodule

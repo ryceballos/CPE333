@@ -23,20 +23,17 @@
 module ExecuteStage(
     input CLK,
     input RESET,
-    input JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,            
-    input [1:0] ResultSrcE,
+    input JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,
+    input [1:0] ForwardAE, ForwardBE, ResultSrcE,
     input [2:0] ALUControlE,
-    input [31:0] RD1E,                                              
-    input [31:0] RD2E,                                              
+    input [31:0] RD1E, RD2E, ALUResultM2,                                              
     input [31:0] PCE, ImmExtE,                                      
-    input [4:0] RdE,                                                
+    input [4:0] Rs1E, Rs2E, RdE,                                                
     input [31:0] PCPlus4E, 
     output RegWriteM, MemWriteM,                                    
     output [1:0] ResultSrcM,
-    input [31:0] ResultW;
-    input [1:0] ForwardAE, ForwardBE;
     output PCSrcE, 
-    output [4:0] RdM,
+    output [4:0] Rs1H, Rs2H, RdM,
     output [31:0] PCPlus4M, PCTargetE, WriteDataM, ALUResultM
     );
     

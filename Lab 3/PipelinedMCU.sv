@@ -1,12 +1,21 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineers: Nash S., Ryan C., Carlos V., Eduardo G.
+// Engineer:  J. Callenes
 // 
 // Create Date: 01/04/2019 04:32:12 PM
 // Design Name: 
 // Module Name: PIPELINED_OTTER_CPU
 // Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -59,11 +68,11 @@ module PipelinedMCU(
         .RD1E(RD1E), 
         .RD2E(RD2E),
         .ImmExtE(ImmExtE),
+        .Rs1E(), 
+        .Rs2E(),
         .RdE(RdE),
         .PCE(PCE), 
-        .PCPlus4E(PCPlus4E),
-        .RS1E(RS1E),
-        .RS2E(RS2E)
+        .PCPlus4E(PCPlus4E)
     );
 
     ExecuteStage E (
@@ -74,26 +83,30 @@ module PipelinedMCU(
         .ALUSrcE(ALUSrcE), 
         .MemWriteE(MemWriteE), 
         .RegWriteE(RegWriteE),
+        .ForwardAE(), 
+        .ForwardBE(),
         .ResultSrcE(ResultSrcE),
         .ALUControlE(ALUControlE),
+        .Rs1E(), 
+        .Rs2E(),
         .RdE(RdE),
         .PCE(PCE), 
         .RD1E(RD1E), 
         .RD2E(RD2E), 
+        .ALUResultM2(),
         .ImmExtE(ImmExtE), 
         .PCPlus4E(PCPlus4E),
         .RegWriteM(RegWriteM), 
         .MemWriteM(MemWriteM),
         .ResultSrcM(ResultSrcM),
         .PCSrcE(PCSrcE), 
+        .Rs1H(), 
+        .Rs2H(),
         .RdM(RdM), 
         .PCPlus4M(PCPlus4M), 
         .PCTargetE(PCTargetE), 
         .WriteDataM(WriteDataM), 
-        .ALUResultM(ALUResultM),
-        .ResultW(ResultW),
-        .ForwardAE(ForwardAE),
-        .ForwardBE(ForwardBE)
+        .ALUResultM(ALUResultM)
     );
     
     MemoryStage M (
@@ -106,11 +119,14 @@ module PipelinedMCU(
         .PCPlus4M(PCPlus4M), 
         .WriteDataM(WriteDataM), 
         .ALUResultM(ALUResultM),
+        .RegWriteH(),
         .RegWriteW(RegWriteW),
         .ResultSrcW(ResultSrcW),
+        .RdH(),
         .RdW(RdW), 
         .PCPlus4W(PCPlus4W), 
-        .ReadDataW(ReadDataW), 
+        .ReadDataW(ReadDataW),
+        .ALUResultM2(), 
         .ALUResultW(ALUResultW)
     );
     
@@ -123,19 +139,20 @@ module PipelinedMCU(
         .PCPlus4W(PCPlus4W), 
         .ReadDataW(ReadDataW), 
         .ALUResultW(ALUResultW),
+        .RegWriteH(), 
         .RegWriteW(RegWriteW), 
+        .RdH(),
         .ResultW(ResultW)
     );
-
-    HazardUnit H (
-        .rst(RESET),
-        .RegWriteM(RegWriteM),
-        .RegWriteW(RegWriteW),
-        .RD_M(RdM),
-        .RD_W(RdW),
-        .Rs1_E(RS1E),
-        .Rs2_E(RS2E),
-        .ForwardAE(ForwardAE),
-        .ForwardBE(ForwardBE)
+    
+    HazardUnit HU (
+        .RegWriteM(), 
+        .RegWriteW(),
+        .RdM(), 
+        .RdW(), 
+        .RS1E(), 
+        .RS2E(),
+        .ForwardAE(), 
+        .ForwardBE()
     );
 endmodule

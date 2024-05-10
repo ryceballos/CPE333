@@ -27,10 +27,10 @@ module MemoryStage(
     input [1:0] ResultSrcM,
     input [4:0] RdM,
     input [31:0] PCPlus4M, WriteDataM, ALUResultM,
-    output RegWriteW,
+    output RegWriteH, RegWriteW,
     output [1:0] ResultSrcW,
-    output [4:0] RdW,
-    output [31:0] PCPlus4W, ReadDataW, ALUResultW
+    output [4:0] RdH, RdW,
+    output [31:0] PCPlus4W, ReadDataW, ALUResultM2, ALUResultW
     );
     
     //Declaring Wires   

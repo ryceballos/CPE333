@@ -27,7 +27,8 @@ module WriteBackStage(
     input [1:0] ResultSrcW,
     input [4:0] RdW,
     input [31:0] PCPlus4W, ReadDataW, ALUResultW,
-    output RegWriteW, 
+    output RegWriteH, RegWriteW, 
+    output [4:0] RdH,
     output [31:0] ResultW
     );
     

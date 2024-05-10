@@ -1,26 +1,35 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineers: Nash S., Ryan C., Carlos V., Eduardo G.
+// Engineer: 
 // 
-// Create Date: 01/04/2019 04:32:12 PM
+// Create Date: 05/09/2024 08:34:50 PM
 // Design Name: 
-// Module Name: PIPELINED_OTTER_CPU
+// Module Name: HazardUnit
 // Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module HazardUnit();
-    input rst, RegWriteM, RegWriteW;
-    input [4:0] RD_M, RD_W, Rs1_E, Rs2_E;
-    output [1:0] ForwardAE, ForwardBE;
-    
-    assign ForwardAE = (rst == 1'b0) ? 2'b00 : 
-                       ((RegWriteM == 1'b1) & (RD_M != 5'h00) & (RD_M == Rs1_E)) ? 2'b10 :
-                       ((RegWriteW == 1'b1) & (RD_W != 5'h00) & (RD_W == Rs1_E)) ? 2'b01 : 2'b00;
-                       
-    assign ForwardBE = (rst == 1'b0) ? 2'b00 : 
-                       ((RegWriteM == 1'b1) & (RD_M != 5'h00) & (RD_M == Rs2_E)) ? 2'b10 :
-                       ((RegWriteW == 1'b1) & (RD_W != 5'h00) & (RD_W == Rs2_E)) ? 2'b01 : 2'b00;
 
+module HazardUnit(
+    input RegWriteM, RegWriteW,
+    input [4:0] RdM, RdW, RS1E, RS2E,
+    output [1:0] ForwardAE, ForwardBE
+    );
+    
+    assign ForwardAE = ((RS1E == RdM) && RegWriteM) ? 2'b10 :
+                       ((RS1E == RdW) && RegWriteW) ? 2'b01 : 2'b00;
+    
+    assign ForwardBE = (((RS1E == RdM) && RegWriteM) && (RS1E != 5'b00000)) ? 2'b10 :
+                       (((RS1E == RdW) && RegWriteW) && (RS1E != 5'b00000)) ? 2'b01 : 2'b00;
+    
 endmodule
