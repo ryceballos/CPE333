@@ -63,16 +63,16 @@ module PipelinedMCU(
         .ALUSrcE(ALUSrcE), 
         .MemWriteE(MemWriteE), 
         .RegWriteE(RegWriteE), 
-        .ResultSrcE(ResultSrcE),                      
+        .ResultSrcE(ResultSrcE),
         .ALUControlE(ALUControlE),
         .RD1E(RD1E), 
         .RD2E(RD2E),
         .ImmExtE(ImmExtE),
-        .Rs1E(), 
-        .Rs2E(),
         .RdE(RdE),
         .PCE(PCE), 
-        .PCPlus4E(PCPlus4E)
+        .PCPlus4E(PCPlus4E),
+        .Rs1E(RS1E),
+        .Rs2E(RS2E)
     );
 
     ExecuteStage E (
@@ -145,14 +145,15 @@ module PipelinedMCU(
         .ResultW(ResultW)
     );
     
-    HazardUnit HU (
-        .RegWriteM(), 
-        .RegWriteW(),
-        .RdM(), 
-        .RdW(), 
-        .RS1E(), 
-        .RS2E(),
-        .ForwardAE(), 
-        .ForwardBE()
+    HazardUnit H (
+        .rst(RESET),
+        .RegWriteM(RegWriteM),
+        .RegWriteW(RegWriteW),
+        .RD_M(RdM),
+        .RD_W(RdW),
+        .RS1E(RS1E),
+        .RS2E(RS2E),
+        .ForwardAE(ForwardAE),
+        .ForwardBE(ForwardBE)
     );
 endmodule
