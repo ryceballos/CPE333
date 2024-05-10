@@ -33,6 +33,8 @@ module ExecuteStage(
     input [31:0] PCPlus4E, 
     output RegWriteM, MemWriteM,                                    
     output [1:0] ResultSrcM,
+    input [31:0] ResultW;
+    input [1:0] ForwardAE, ForwardBE;
     output PCSrcE, 
     output [4:0] RdM,
     output [31:0] PCPlus4M, PCTargetE, WriteDataM, ALUResultM

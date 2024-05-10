@@ -1,21 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer:  J. Callenes
+// Engineers: Nash S., Ryan C., Carlos V., Eduardo G.
 // 
 // Create Date: 01/04/2019 04:32:12 PM
 // Design Name: 
 // Module Name: PIPELINED_OTTER_CPU
 // Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -70,7 +61,9 @@ module PipelinedMCU(
         .ImmExtE(ImmExtE),
         .RdE(RdE),
         .PCE(PCE), 
-        .PCPlus4E(PCPlus4E)
+        .PCPlus4E(PCPlus4E),
+        .RS1E(RS1E),
+        .RS2E(RS2E)
     );
 
     ExecuteStage E (
@@ -97,7 +90,10 @@ module PipelinedMCU(
         .PCPlus4M(PCPlus4M), 
         .PCTargetE(PCTargetE), 
         .WriteDataM(WriteDataM), 
-        .ALUResultM(ALUResultM)
+        .ALUResultM(ALUResultM),
+        .ResultW(ResultW),
+        .ForwardAE(ForwardAE),
+        .ForwardBE(ForwardBE)
     );
     
     MemoryStage M (
@@ -129,5 +125,17 @@ module PipelinedMCU(
         .ALUResultW(ALUResultW),
         .RegWriteW(RegWriteW), 
         .ResultW(ResultW)
+    );
+
+    HazardUnit H (
+        .rst(RESET),
+        .RegWriteM(RegWriteM),
+        .RegWriteW(RegWriteW),
+        .RD_M(RdM),
+        .RD_W(RdW),
+        .Rs1_E(RS1E),
+        .Rs2_E(RS2E),
+        .ForwardAE(ForwardAE),
+        .ForwardBE(ForwardBE)
     );
 endmodule

@@ -50,7 +50,7 @@ module Register(
     assign REG_RS2 = address[REG_ADR2];
     
     //Synchronously save data
-    always_ff@ (negedge CLK) begin
+    always_ff@ (posedge CLK) begin
         if (REG_EN) begin
             if (REG_W_ADR != 0) begin           //If address is not x0, save data in specified location
                 address[REG_W_ADR] = REG_W_DATA;
