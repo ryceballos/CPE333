@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Cal Poly SLO - CPE 333
+// Engineer: Ryan Ceballos, Yexelle Nash Segovia, Carlos Vidal, Eduardo Gallegos
 // 
 // Create Date: 04/30/2024 02:46:40 PM
-// Design Name: 
+// Design Name: OTTER Pipelined Processor with Control Hazards
 // Module Name: Execute
 // Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -29,17 +19,17 @@ module ExecuteStage(
     input [31:0] RD1E, RD2E, ALUResultM2,                                              
     input [31:0] PCE, ImmExtE,                                      
     input [4:0] Rs1E, Rs2E, RdE,                                                
-    input [31:0] PCPlus4E, 
+    input [31:0] PCPlus4E, ResultW,
     output RegWriteM, MemWriteM,                                    
     output [1:0] ResultSrcM,
-    output PCSrcE, 
-    output [4:0] Rs1H, Rs2H, RdM,
+    output PCSrcE, ResultSrcEH
+    output [4:0] Rs1EH, Rs2EH, RdM, RdEH
     output [31:0] PCPlus4M, PCTargetE, WriteDataM, ALUResultM
     );
     
     //Declaring Wires 
     logic ZeroE;                                         //--For Execute -> Fetch
-    logic [31:0] SrcBE, ALUResultE;                       //--For Algorithmic Logic Unit
+    logic [31:0] SrcBE, SrcAE, ALUResultE;                       //--For Algorithmic Logic Unit
     
     //Pipeline Registers                                       
     reg MemWriteE_reg, RegWriteE_reg;                   //--For Control Unit
@@ -53,19 +43,33 @@ module ExecuteStage(
     
     //Initialization of Modules
     ArithmeticLogicUnit ALU (                           //Algorithmic Logic Unit
-        .ALU_SRC_A(RD1E),
+        .ALU_SRC_A(SrcAE),
         .ALU_SRC_B(SrcBE),
         .ALU_FUN(ALUControlE),
         .ALU_result(ALUResultE),
         .ALU_zero(ZeroE)
     );
-    
-    srcBMUX BMUX (                                      //SrcB Mux
+
+    srcAMUX AMUX (                                        //SrcA Mux
+        .RD1E(RD1E),
+        .ResultW(ResultW),
+        .ALUResultM(ALUResultM2),
+        .ForwardAE(ForwardAE),
+        .SrcAE(SrcAE)
+    );
+
+    srcBMUX1 BMUX1 (                                      //SrcB Mux1
+        .RD2E(RD2E),
+        .ResultW(ResultW),
+        .ALUResultM(ALUResultM2),
+        .ForwardBE(ForwardBE),
+        .WriteDataE(WriteDataE)
+    );
+
+    srcBMUX1 BMUX2 (                                      //SrcB Mux2
         .srcB_SEL(ALUSrcE),
-        .Zero(RD2E),
+        .Zero(WriteDataE),
         .One(ImmExtE),
-        .Two(),
-        .Three(),
         .ALU_srcB(SrcBE)
     );
     
@@ -102,7 +106,7 @@ module ExecuteStage(
             RdE_reg <= RdE;
             PCPlus4E_reg <= PCPlus4E;
             ALUResult_reg <= ALUResultE;
-            WriteDataE_reg <= RD2E;
+            WriteDataE_reg <= WriteDataE;
         end
     end
     
@@ -116,5 +120,8 @@ module ExecuteStage(
     assign PCPlus4M = PCPlus4E_reg;
     assign WriteDataM = WriteDataE_reg;
     assign ALUResultM = ALUResult_reg;
-    
+    assign Rs1EH = Rs1E;
+    assign Rs2EH = Rs2E;
+    assign RdEH = RdE;
+    assign ResultSrcEH = ResultSrcE[0]
 endmodule

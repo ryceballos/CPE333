@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Cal Poly SLO - CPE 333
+// Engineer: Ryan Ceballos, Yexelle Nash Segovia, Carlos Vidal, Eduardo Gallegos
 // 
 // Create Date: 05/01/2024 03:50:35 PM
-// Design Name: 
+// Design Name: OTTER Pipelined Processor with Control Hazards
 // Module Name: MemoryStage
 // Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -27,9 +17,9 @@ module MemoryStage(
     input [1:0] ResultSrcM,
     input [4:0] RdM,
     input [31:0] PCPlus4M, WriteDataM, ALUResultM,
-    output RegWriteH, RegWriteW,
+    output RegWriteMH, RegWriteW,
     output [1:0] ResultSrcW,
-    output [4:0] RdH, RdW,
+    output [4:0] RdMH, RdW,
     output [31:0] PCPlus4W, ReadDataW, ALUResultM2, ALUResultW
     );
     
@@ -88,5 +78,7 @@ module MemoryStage(
     assign PCPlus4W = PCPlus4M_reg; 
     assign ReadDataW = ReadDataM_reg;
     assign ALUResultW = ALUResultM_reg;
-    
+    assign RdMH = RdM;
+    assign RegWriteMH = RegWriteM;
+
 endmodule

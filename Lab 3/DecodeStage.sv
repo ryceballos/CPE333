@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Cal Poly SLO - CPE 333
+// Engineer: Ryan Ceballos, Yexelle Nash Segovia, Carlos Vidal, Eduardo Gallegos
 // 
 // Create Date: 04/30/2024 07:43:17 AM
-// Design Name: 
+// Design Name: OTTER Pipelined Processor with Control Hazards
 // Module Name: Decode
 // Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -26,12 +16,12 @@ module DecodeStage(
     input RegWriteW,
     input [4:0] RdW,
     input [31:0] PCD, InstrD, ResultW, PCPlus4D,
-    output JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,                                  
+    output JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,
     output [1:0] ResultSrcE,
     output [2:0] ALUControlE,
-    output [31:0] RD1E, RD2E,           
-    output [31:0] ImmExtE,     
-    output [4:0] Rs1E, Rs2E, RdE,
+    output [31:0] RD1E, RD2E,
+    output [31:0] ImmExtE,
+    output [4:0] Rs1E, Rs2E, RdE, Rs1DH, Rs2DH
     output [31:0] PCE, PCPlus4E
     );
     
@@ -162,5 +152,7 @@ module DecodeStage(
     assign RdE = RdD_reg;                                               
     assign PCE = PCD_reg;
     assign PCPlus4E = PCPlus4D_reg; 
+    assign Rs1DH = Rs1D;
+    assign Rs2DH = Rs2D;
 
 endmodule

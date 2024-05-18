@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: Cal Poly SLO - CPE 333
+// Engineer: Ryan Ceballos, Yexelle Nash Segovia, Carlos Vidal, Eduardo Gallegos
 // 
 // Create Date: 01/25/2024 04:18:36 PM
-// Design Name: 
+// Design Name: OTTER Pipelined Processor with Control Hazards
 // Module Name: Register
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+// Project Name: OTTER
 //////////////////////////////////////////////////////////////////////////////////
 
 
