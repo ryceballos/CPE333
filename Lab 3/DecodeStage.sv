@@ -13,7 +13,7 @@
 module DecodeStage(
     input CLK,
     input RESET,
-    input RegWriteW,
+    input FlushE, RegWriteW,
     input [4:0] RdW,
     input [31:0] PCD, InstrD, ResultW, PCPlus4D,
     output JumpE, BranchE, ALUSrcE, MemWriteE, RegWriteE,
@@ -21,7 +21,7 @@ module DecodeStage(
     output [2:0] ALUControlE,
     output [31:0] RD1E, RD2E,
     output [31:0] ImmExtE,
-    output [4:0] Rs1E, Rs2E, RdE, Rs1DH, Rs2DH
+    output [4:0] Rs1E, Rs2E, RdE, Rs1DH, Rs2DH,
     output [31:0] PCE, PCPlus4E
     );
     
@@ -84,24 +84,8 @@ module DecodeStage(
     );
     
     //Pipeline Logic
-    /*always_comb begin
-        RegWriteD_reg = RegWriteD;
-        ResultSrcD_reg = ResultSrcD;
-        MemWriteD_reg = MemWriteD;
-        JumpD_reg = JumpD;
-        BranchD_reg = BranchD;
-        ALUSrcD_reg = ALUSrcD;
-        ALUControlD_reg = ALUControlD;
-        RD1D_reg = RD1D;
-        RD2D_reg = RD2D;
-        ImmExtD_reg = ImmExtD;
-        RdD_reg = InstrD[11:7];
-        PCD_reg = PCD;
-        PCPlus4D_reg = PCPlus4D;
-    end*/
-    
     always_ff@ (posedge CLK or negedge RESET) begin
-        if (RESET) begin
+        if (RESET || FlushE) begin
             RegWriteD_reg = 0;
             ResultSrcD_reg = 0;
             MemWriteD_reg = 0;
@@ -152,7 +136,7 @@ module DecodeStage(
     assign RdE = RdD_reg;                                               
     assign PCE = PCD_reg;
     assign PCPlus4E = PCPlus4D_reg; 
-    assign Rs1DH = Rs1D;
-    assign Rs2DH = Rs2D;
+    assign Rs1DH = InstrD[19:15];
+    assign Rs2DH = InstrD[24:20];
 
 endmodule

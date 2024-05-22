@@ -15,19 +15,19 @@ module srcAMUX(
     input [31:0] RD1E,
     input [31:0] ResultW,
     input [31:0] ALUResultM,
-    output logic [31:0] SrcBE
+    output logic [31:0] SrcAE
     );
     
     always_comb begin
         case (ForwardAE)
             2'b00:
-                SrcBE = RD1E;
+                SrcAE = RD1E;
             2'b01:
-                SrcBE = ResultW;
+                SrcAE = ResultW;                //Forward from Writeback Stage
             2'b10:
-                SrcBE = ALUResultM;
+                SrcAE = ALUResultM;             //Forward from Memory Stage
             default:
-                SrcBE = 32'h0badbad0;
+                SrcAE = 32'h0badbad0;
         endcase
    end
 endmodule

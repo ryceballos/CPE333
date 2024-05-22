@@ -24,6 +24,7 @@ module FetchStage(
     input CLK,
     input RESET,
     input PCsrcE,
+    input StallF, StallD, FlushD,
     input [31:0] PCTargetE,
     output [31:0] PCD,
     output [31:0] InstrD,
@@ -47,7 +48,8 @@ module FetchStage(
     
     ProgramCounter PC (                 //Program Counter
         .CLK(CLK),
-        .PC_reset(RESET), 
+        .PC_reset(RESET),
+        .PC_StallEN(StallF), 
         .PC_IN(PC_F), 
         .PC_OUT(PCF)
     );
@@ -71,10 +73,14 @@ module FetchStage(
     end*/
 
     always_ff@ (posedge CLK) begin
-        if (RESET) begin
+        if (RESET || FlushD) begin
             InstrF_reg <= 0;
             PCF_reg <= 0;
             PCPlus4_reg <= 0;
+        end else if (StallD) begin
+            InstrF_reg <= InstrF_reg;
+            PCF_reg <= PCF_reg;
+            PCPlus4_reg <= PCPlus4_reg;
         end else begin
             InstrF_reg <= InstrF;
             PCF_reg <= PCF;

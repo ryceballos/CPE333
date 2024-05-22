@@ -10,8 +10,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module HazardUnit(
-    input RESET, RegWriteM, RegWriteW, PCSrcE, ResultSrcE
-    input [4:0] RdM, RdW, RS1E, RS2E, RdE, Rs1D, Rs2d,
+    input RegWriteM, RegWriteW, PCSrcE, ResultSrcE,
+    input [4:0] RdM, RdW, RS1E, RS2E, RdE, Rs1D, Rs2D,
     output [1:0] ForwardAE, ForwardBE,
     output StallF, StallD, FlushD, FlushE // Bus Size???
     );
@@ -19,18 +19,20 @@ module HazardUnit(
     logic lwStall; // BUS SIZE ???
 
     // Data Hazard Logic
-    assign ForwardAE = ((RS1E == RdM) && RegWriteM) ? 2'b10 :
-                       ((RS1E == RdW) && RegWriteW) ? 2'b01 : 2'b00;
+    assign ForwardAE = (((RS1E == RdM) && RegWriteM) && RS1E != 5'b00000)  ? 2'b10 :
+                       (((RS1E == RdW) && RegWriteW) && RS1E != 5'b00000) ? 2'b01 : 2'b00;
 
-    assign ForwardBE = (((RS1E == RdM) && RegWriteM) && (RS1E != 5'b00000)) ? 2'b10 :
-                       (((RS1E == RdW) && RegWriteW) && (RS1E != 5'b00000)) ? 2'b01 : 2'b00;
+    assign ForwardBE = (((RS2E == RdM) && RegWriteM) && RS2E != 5'b00000) ? 2'b10 :
+                       (((RS2E == RdW) && RegWriteW) && RS2E != 5'b00000) ? 2'b01 : 2'b00;
 
     // Load Word Stall Logic
-    assign lwStall =  ((Rs1D == RdE) || (Rs2D == RdE)) && ResultSrcE;
-    assign StallF = StallD = lwStall; // UNSURE IF VALID
+    assign lwStall = ((Rs1D == RdE) || (Rs2D == RdE)) && ResultSrcE;
+    assign StallF = lwStall;
+    assign StallD = lwStall;
+    assign StallF = lwStall;
 
-    // Control Hazard Flush
+    // Control Hazard Flush Logic
     assign FlushD = PCSrcE;
-    assign FlushE = lwStall || PCSrcE;
+    assign FlushE = lwStall || PCSrcE; 
 
 endmodule

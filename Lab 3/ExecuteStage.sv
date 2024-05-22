@@ -22,8 +22,8 @@ module ExecuteStage(
     input [31:0] PCPlus4E, ResultW,
     output RegWriteM, MemWriteM,                                    
     output [1:0] ResultSrcM,
-    output PCSrcE, ResultSrcEH
-    output [4:0] Rs1EH, Rs2EH, RdM, RdEH
+    output PCSrcE, PCSrcEH, ResultSrcEH,
+    output [4:0] Rs1EH, Rs2EH, RdM, RdEH,
     output [31:0] PCPlus4M, PCTargetE, WriteDataM, ALUResultM
     );
     
@@ -58,16 +58,16 @@ module ExecuteStage(
         .SrcAE(SrcAE)
     );
 
-    srcBMUX1 BMUX1 (                                      //SrcB Mux1
+    srcBMUX BMUX1 (                                      //SrcB Mux1
+        .ForwardBE(ForwardBE),
         .RD2E(RD2E),
         .ResultW(ResultW),
         .ALUResultM(ALUResultM2),
-        .ForwardBE(ForwardBE),
         .WriteDataE(WriteDataE)
     );
 
-    srcBMUX1 BMUX2 (                                      //SrcB Mux2
-        .srcB_SEL(ALUSrcE),
+    srcBMUX2 BMUX2 (                                      //SrcB Mux2
+        .ALUSrcE(ALUSrcE),
         .Zero(WriteDataE),
         .One(ImmExtE),
         .ALU_srcB(SrcBE)
@@ -123,5 +123,6 @@ module ExecuteStage(
     assign Rs1EH = Rs1E;
     assign Rs2EH = Rs2E;
     assign RdEH = RdE;
-    assign ResultSrcEH = ResultSrcE[0]
+    assign ResultSrcEH = ResultSrcE[0];
+    assign PCSrcEH = PCSrcE;
 endmodule

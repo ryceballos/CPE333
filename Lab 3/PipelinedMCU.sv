@@ -20,7 +20,7 @@ module PipelinedMCU(
     output logic IOBUS_WR
 );
 
-    wire JumpE, PCSrcE, RegWriteW, RegWriteE, ALUSrcE, MemWriteE, BranchE, RegWriteM, MemWriteM, ResultSrcEH, RegWriteMH, RegWriteWH;
+    wire JumpE, PCSrcE, PCSrcEH, RegWriteW, RegWriteE, ALUSrcE, MemWriteE, BranchE, RegWriteM, MemWriteM, ResultSrcEH, RegWriteMH, RegWriteWH;
     wire [1:0] ResultSrcE, ResultSrcM, ResultSrcW;
     wire [2:0] ALUControlE;
     wire [4:0] RdE, RdM, RdW;
@@ -34,6 +34,9 @@ module PipelinedMCU(
         .CLK(CLK),
         .RESET(RESET),
         .PCsrcE(PCSrcE),
+        .StallF(StallF), 
+        .StallD(StallD), 
+        .FlushD(FlushD),
         .PCTargetE(PCTargetE),
         .PCD(PCD),
         .InstrD(InstrD),
@@ -80,29 +83,30 @@ module PipelinedMCU(
         .ForwardBE(ForwardBE),
         .ResultSrcE(ResultSrcE),
         .ALUControlE(ALUControlE),
-        .Rs1E(RS1E),
-        .Rs2E(RS2E),
-        .RdE(RdE),
-        .PCE(PCE),
         .RD1E(RD1E),
         .RD2E(RD2E),
         .ALUResultM2(ALUResultM),
+        .PCE(PCE),
         .ImmExtE(ImmExtE),
+        .Rs1E(RS1E),
+        .Rs2E(RS2E),
+        .RdE(RdE),
         .PCPlus4E(PCPlus4E),
+        .ResultW(ResultW),
         .RegWriteM(RegWriteM),
         .MemWriteM(MemWriteM),
         .ResultSrcM(ResultSrcM),
         .PCSrcE(PCSrcE),
+        .PCSrcEH(PCSrcEH),
+        .ResultSrcEH(ResultSrcEH),
         .Rs1EH(RS1EH),
         .Rs2EH(RS2EH),
-        .RdEH(RDEH),
         .RdM(RdM),
+        .RdEH(RDEH),
         .PCPlus4M(PCPlus4M),
         .PCTargetE(PCTargetE),
         .WriteDataM(WriteDataM),
-        .ALUResultM(ALUResultM),
-        .ResultW(ResultW),
-        .ResultSrcEH(ResultSrcEH)
+        .ALUResultM(ALUResultM)
     );
     
     MemoryStage M (
@@ -136,24 +140,22 @@ module PipelinedMCU(
         .ReadDataW(ReadDataW),
         .ALUResultW(ALUResultW),
         .RegWriteWH(RegWriteWH),
-        // .RegWriteW(RegWriteW),
         .RdWH(RDWH),
         .ResultW(ResultW)
     );
     
     HazardUnit H (
-        .rst(RESET),
         .RegWriteM(RegWriteMH),
         .RegWriteW(RegWriteWH),
-        .PCSrcE(PCSrcE),
+        .PCSrcE(PCSrcEH),
         .ResultSrcE(ResultSrcEH),
+        .RdM(RDMH),
         .RdW(RDWH),
         .RS1E(RS1EH),
         .RS2E(RS2EH),
         .RdE(RDEH),
         .Rs1D(RS1DH),
         .Rs2D(RS2DH),
-        .RdM(RDMH),
         .ForwardAE(ForwardAE),
         .ForwardBE(ForwardBE),
         .StallF(StallF),

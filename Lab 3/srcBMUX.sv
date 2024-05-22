@@ -10,7 +10,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module srcBMUX1(
+module srcBMUX(
     input [1:0] ForwardBE,
     input [31:0] RD2E,
     input [31:0] ResultW,
@@ -23,9 +23,9 @@ module srcBMUX1(
             2'b00:
                 WriteDataE = RD2E;
             2'b01:
-                WriteDataE = ResultW;
+                WriteDataE = ResultW;               //Forward from Writeback Stage
             2'b10:
-                WriteDataE = ALUResultM;
+                WriteDataE = ALUResultM;            //Forward from Memory Stage
             default:
                 WriteDataE = 32'h0badbad0;
         endcase

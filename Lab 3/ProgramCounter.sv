@@ -22,7 +22,7 @@
 
 module ProgramCounter(
     input PC_reset,
-    //input PC_WE,
+    input PC_StallEN,
     input [31:0] PC_IN,
     input CLK,
     output logic [31:0] PC_OUT
@@ -31,6 +31,8 @@ module ProgramCounter(
     always_ff@ (posedge CLK) begin
         if (PC_reset) begin             //To reset the current value back to 0
             PC_OUT <= 0;
+        end else if (PC_StallEN) begin
+            PC_OUT <= PC_OUT;
         end else begin                  //Output the current value
             PC_OUT <= PC_IN;
         end
