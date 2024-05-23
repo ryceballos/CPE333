@@ -13,11 +13,11 @@
 module WriteBackStage(
     input CLK,
     input RESET,
-    input RegWriteM,
+    input RegWriteW,
     input [1:0] ResultSrcW,
     input [4:0] RdW,
     input [31:0] PCPlus4W, ReadDataW, ALUResultW,
-    output RegWriteWH, RegWriteW, 
+    output RegWriteWH, RegWriteWOut, 
     output [4:0] RdWH,
     output [31:0] ResultW
     );
@@ -34,6 +34,7 @@ module WriteBackStage(
     assign ResultW = (ResultSrcW == 2'b00) ? ALUResultW :
                      (ResultSrcW == 2'b01) ? ReadDataW : PCPlus4W;
     assign RdWH = RdW;
+    assign RegWriteWOut = RegWriteW;
     assign RegWriteWH = RegWriteW;
     
 endmodule

@@ -20,7 +20,7 @@ module PipelinedMCU(
     output logic IOBUS_WR
 );
 
-    wire JumpE, PCSrcE, PCSrcEH, RegWriteW, RegWriteE, ALUSrcE, MemWriteE, BranchE, RegWriteM, MemWriteM, ResultSrcEH, RegWriteMH, RegWriteWH;
+    wire JumpE, PCSrcE, PCSrcEH, RegWriteW, RegWriteWOut, RegWriteE, ALUSrcE, MemWriteE, BranchE, RegWriteM, MemWriteM, ResultSrcEH, RegWriteMH, RegWriteWH;
     wire [1:0] ResultSrcE, ResultSrcM, ResultSrcW;
     wire [2:0] ALUControlE;
     wire [4:0] RdE, RdM, RdW;
@@ -46,7 +46,7 @@ module PipelinedMCU(
     DecodeStage D (
         .CLK(CLK),
         .RESET(RESET),
-        .RegWriteW(RegWriteW),
+        .RegWriteW(RegWriteWOut),
         .RdW(RdW),
         .PCD(PCD),
         .InstrD(InstrD),
@@ -140,6 +140,7 @@ module PipelinedMCU(
         .ReadDataW(ReadDataW),
         .ALUResultW(ALUResultW),
         .RegWriteWH(RegWriteWH),
+        .RegWriteWOut(RegWriteWOut),
         .RdWH(RDWH),
         .ResultW(ResultW)
     );
